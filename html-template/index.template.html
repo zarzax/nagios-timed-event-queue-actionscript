@@ -1,0 +1,42 @@
+<html lang="en">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+<title>${title}</title>
+
+<style>
+body { margin: 0px; overflow:hidden }
+</style>
+
+</head>
+
+<body scroll="no">
+
+<div id="timedEventElement" width="800px" height="800px">
+  	<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000"
+			id="${application}" width="${width}" height="${height}"
+			codebase="http://fpdownload.macromedia.com/get/flashplayer/current/swflash.cab">
+			<param name="movie" value="${swf}.swf" />
+			<param name="quality" value="high" />
+			<param name="bgcolor" value="${bgcolor}" />
+			<param name="allowScriptAccess" value="sameDomain" />
+			<embed 
+				src="${swf}.swf?backend_url=http%3A%2F%2Flocalhost%2Fnagiosreports%2Fbackend%2F%3Fcmd%3Dgettimedeventqueuesummary%26instance_id%3Din%3A5&helper_url=http%3A%2F%2Flocalhost%2Fnagiosreports%2Fajaxhelper.php&bucket_size=3&window=300&refresh_interval=5&instance_id=in:5" 
+				quality="high" 
+				bgcolor="${bgcolor}"
+				width="${width}" height="${height}" name="${application}" align="middle"
+				play="true"
+				loop="false"
+				quality="high"
+				allowScriptAccess="sameDomain"
+				type="application/x-shockwave-flash"
+				pluginspage="http://www.adobe.com/go/getflashplayer">
+			</embed>
+	</object>
+</div>
+
+
+
+</body>
+</html>

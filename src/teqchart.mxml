@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" 
+				layout="absolute"
+				preloader="nagios.preloader.GenericPreloader"
+				creationComplete="init();" 
+				height="350" 
+				color="#FFFFFF" 
+				backgroundGradientAlphas="[1.0, 0.4]" 
+				backgroundGradientColors="[#010101, #010101]" 
+				borderStyle="outset" 
+				cornerRadius="13" 
+				borderColor="#D1E7F6" 
+				horizontalAlign="left" 
+				currentState="mainView">
+
+
+	<!-- External Script Includes -->
+	
+	<mx:Script source="main.as" /> 
+	<mx:Script source="languageStrings.as" />
+	<mx:Script source="timedEventQueue.as" /> 
+	<mx:Script source="UI_interactions.as" /> 
+			
+
+	<!-- Flex States -->	
+			
+	<mx:states>
+		<mx:State name="mainView">
+			<mx:SetProperty target="{chart}" name="height" value="304"/>
+			<mx:SetProperty target="{chart}" name="y"/>
+			<mx:SetStyle target="{chart}" name="bottom" value="10"/>			
+			<mx:SetStyle target="{chart}" name="fontSize" value="10"/>
+			<mx:SetStyle target="{chart}" name="fontFamily" value="Arial"/>
+			<mx:SetStyle target="{chart}" name="color" value="#FFFFFF"/>
+			<mx:SetStyle target="{settingsPanel}" name="borderColor" value="#6D6D6D"/>
+			<mx:SetProperty target="{settingsPanel}" name="alpha" value="1.0"/>
+			<mx:SetStyle target="{settingsPanel}" name="backgroundAlpha" value="1.0"/>
+			<mx:SetStyle target="{settingsPanel}" name="backgroundColor" value="#C1C1C1"/>
+		</mx:State>
+		<mx:State name="settingsView">
+			<mx:SetProperty target="{settingsPanel}" name="visible" value="true" />
+			<mx:SetEventHandler target="{settingsButton}" name="click" handler="currentState='mainView'"/>
+			<mx:SetStyle target="{settingsPanel}" name="borderColor" value="#6D6D6D"/>
+			<mx:SetProperty target="{settingsPanel}" name="alpha" value="1.0"/>
+			<mx:SetStyle target="{settingsPanel}" name="backgroundAlpha" value="1.0"/>
+			<mx:SetStyle target="{settingsPanel}" name="backgroundColor" value="#C1C1C1"/>
+			
+			<mx:SetProperty target="{horizontalAxis}" name="title" value="" />
+			<mx:SetProperty target="{verticalAxis}" name="title" value="" />
+			
+		</mx:State>
+	</mx:states>  
+    
+    
+    <!-- Charting Code -->
+
+    <!-- Chart Style -->
+	<mx:Array id="chartBackgroundElementsStyle">
+	     <mx:GridLines 
+	        horizontalChangeCount="1" 
+	        verticalChangeCount="1"
+	        direction="both">
+	        <mx:horizontalStroke>
+	           <mx:Stroke weight="0" color="0xFFFFFF" alpha=".10"/>
+	        </mx:horizontalStroke>
+	        <mx:verticalStroke>
+	           <mx:Stroke weight="0" alpha="0" />
+	        </mx:verticalStroke>
+	        <mx:horizontalFill>
+	           <mx:SolidColor color="0xFFFFFF" alpha=".05"/>
+	        </mx:horizontalFill>
+	     </mx:GridLines>
+	</mx:Array>    
+    
+    <!-- Chart Component -->
+	<mx:LineChart y="32" height="304" right="10" left="10"
+		id="chart" 
+		dataProvider="{timedEventQueueAC}" 
+		backgroundElements="{chartBackgroundElementsStyle}"
+		>
+		
+		<mx:verticalAxis>
+			<mx:LinearAxis id="verticalAxis" autoAdjust="true" displayName="??"/>
+		</mx:verticalAxis>
+		
+		<mx:horizontalAxis>
+			<mx:LinearAxis id="horizontalAxis" autoAdjust="false" displayName="??"/>
+		</mx:horizontalAxis>
+		
+		<mx:verticalAxisRenderers>
+                <mx:AxisRenderer 
+                    axis="{verticalAxis}"
+                    showLine="true"
+                />
+        </mx:verticalAxisRenderers>
+
+
+		<mx:series>
+			<mx:LineSeries 	id="NumberScheduledServicesFlashText"
+							displayName="??" 
+							yField="type0"
+							form="curve"
+							showDataEffect="rearrangeData"
+							>
+	            <mx:lineStroke>
+	                <mx:Stroke 
+	                    color="0x6596D9" 
+	                    weight="5" 
+	                    alpha=".8"
+	                />
+				</mx:lineStroke>
+			</mx:LineSeries>				
+										
+			<mx:LineSeries 	id="NumberScheduledHostsFlashText"
+							displayName="??" 
+							yField="type12"
+							form="curve"
+							showDataEffect="rearrangeData"
+							>
+	            <mx:lineStroke>
+	                <mx:Stroke 
+	                    color="0xFA663E" 
+	                    weight="5" 
+	                    alpha=".8"
+	                />
+				</mx:lineStroke>									
+			</mx:LineSeries>		
+		</mx:series>
+	</mx:LineChart>
+	
+	<!-- Chart Styling -->
+	
+
+	
+	<!-- Chart Legend -->
+	<mx:Legend dataProvider="{chart}" y="32" right="10" fontSize="10"/>    
+    
+	<!-- Define chart effect. -->  
+	<mx:SeriesInterpolate 	id="rearrangeData" 
+							duration="600" 
+							minimumElementDuration="200" 
+							elementOffset="0"
+							/>
+							
+							
+    
+    <!-- Main Screen Buttons -->
+    
+    <mx:Button id="settingsButton" label="??" icon="{imageSettings}" click="currentState='settingsView'" right="10" width="25" top="2"  height="25" borderColor="#000000" themeColor="#2B2B2B" cornerRadius="16"/>  	
+	<mx:Button id="playButton" label="??" icon="{imagePause}" click="playFunctionUpdater()" right="43" width="25" top="2"  height="25" borderColor="#000000" themeColor="#2B2B2B" cornerRadius="16"/>
+
+    
+    <!-- Settings Panel - only visible in 'settingsView" state -->
+    
+	<mx:Panel visible="false" x="0" width="100%" height="50%" layout="absolute" id="settingsPanel" title="Settings" horizontalAlign="center" verticalAlign="top" backgroundColor="#99ACB5" bottom="0">
+	
+		<!--Refresh Settings-->
+		<mx:Label y="10" text="??" color="#000000" width="100" id="refreshSettingLabel" left="10"/>
+		<mx:HSlider 
+				id="refreshSettingSlider"
+			 	minimum="1"
+			 	maximum="60"
+			 	change="refreshSliderUpdater(event);"
+			 	snapInterval="1"
+			 	tickInterval="10"	 	
+			  	width="150"
+			  	borderColor="#408788" y="36" left="10"/>
+		<mx:TextInput x="10" y="62" color="#000000" id="refreshSettingTextInput" width="50" enter="refreshTextUpdater(event);"/>
+		
+		<!--Window Settings-->
+		<mx:Label y="10" text="??" color="#000000" width="100" id="windowSettingLabel" left="214"/>				
+		<mx:HSlider 
+				id="windowSettingSlider"
+			 	minimum="15"
+			 	maximum="900"
+			 	change="windowSliderUpdater(event);"
+			 	snapInterval="1"
+			 	tickInterval="10"
+			  	width="150"
+			  	borderColor="#408788" y="36" left="214"/>
+		<mx:TextInput x="214" y="62" color="#000000" id="windowSettingTextInput" width="50" enter="windowTextUpdater(event);"/>
+		
+		<!--Copywrite Notice-->
+		<mx:Text x="10" y="105" text="??" id="NagiosCopywriteText"/>
+		
+		<!--Close Button-->
+		<mx:Button label="??" color="#000000" id="closeButton" click="currentState='mainView'" bottom="10" right="10"/>
+	</mx:Panel>    
+
+	
+	<!-- Flex Transitions -->
+    <mx:transitions>
+       <mx:Transition fromState="mainView" toState="settingsView">
+            <mx:Parallel >
+            	<mx:SetPropertyAction target="{settingsPanel}" name="visible" value="true" />
+            	<mx:WipeUp target="{settingsPanel}" duration="600" showTarget="true" /> 	
+            	<mx:Resize target="{chart}" heightTo="133" duration="600" />
+            </mx:Parallel>
+        </mx:Transition>     
+        
+       <mx:Transition fromState="settingsView" toState="mainView">
+            <mx:Parallel >
+            	<mx:Sequence target="{settingsPanel}">
+	            	<mx:WipeDown target="{settingsPanel}" duration="600" showTarget="false" /> 
+	            	<mx:SetPropertyAction target="{settingsPanel}" name="visible" value="false" />
+            	</mx:Sequence>
+            	
+            	<mx:Resize target="{chart}" heightTo="304" duration="600" />
+            </mx:Parallel>
+        </mx:Transition>          
+    </mx:transitions>	
+
+</mx:Application>
