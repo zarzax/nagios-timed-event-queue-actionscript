@@ -1,7 +1,5 @@
 /*
  *	Authar: 	Mark Young
- *  Company: 	Nagios Enterprises
- *	Copywrite:	2008
  *
  *	Description:	main.as Main script for the teqchart.mxml Timed Event Queue Flex application.
  *
